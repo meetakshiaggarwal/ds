@@ -1,0 +1,86 @@
+{
+    "version": "0.2.0",
+
+    "configurations": [
+      {
+        "type": "node",
+        "request": "attach",
+        "name": "Attach to Node in Cmder",
+        "port": 9229
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run Custom JS with Input pattern1",
+        "program": "${workspaceFolder}/pattern1/${input:inputJsFilePattern1}",
+        "args": ["${workspaceFolder}/inputs/${input:inputTxtFile}"],
+        "console": "integratedTerminal"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run Custom JS with Input pattern2",
+        "program": "${workspaceFolder}/pattern2/${input:inputJsFilePattern2}",
+        "args": ["${workspaceFolder}/inputs/${input:inputTxtFile}"],
+        "console": "integratedTerminal"
+      }
+    ],
+
+    "inputs": [
+      {
+        "id": "inputJsFilePattern1",
+        "type": "pickString",
+        "description": "Pick JS file to debug",
+        "options": [
+          "bubble.js",
+          "Pattern1SlidingWindowQ1E.js",
+          "Pattern1SlidingWindowQ2E.js",
+          "Pattern1SlidingWindowQ3E.js",
+          "Pattern1SlidingWindowQ4M.js",
+          "Pattern1SlidingWindowQ5M.js",
+          "Pattern1SlidingWindowQ6M.js",
+          "Pattern1SlidingWindowQ7M.js",
+          "Pattern1SlidingWindowQ8M.js",
+          "Pattern1SlidingWindowQ9M.js",
+          "Pattern1SlidingWindowQ10M.js",
+        ]
+      },
+      {
+        "id": "inputJsFilePattern2",
+        "type": "pickString",
+        "description": "Pick JS file to debug",
+        "options": [
+          "Pattern2TwoPointersQ1E.js",
+          "Pattern2TwoPointersQ2E.js",
+          "Pattern2TwoPointersQ3E.js",
+          "Pattern2TwoPointersQ4E.js",
+          "Pattern2TwoPointersQ5E.js",
+        ]
+      },
+      {
+        "id": "inputTxtFile",
+        "type": "pickString",
+        "description": "Pick input file",
+        "options": [
+          "bubbleI1.txt",
+          "Pattern1SlidingWindowQ1I1.txt",
+          "Pattern1SlidingWindowQ2I1.txt",
+          "Pattern1SlidingWindowQ3I1.txt",
+          "Pattern1SlidingWindowQ4I1.txt",
+          "Pattern1SlidingWindowQ5I1.txt",
+          "Pattern1SlidingWindowQ6I1.txt",
+          "Pattern1SlidingWindowQ7I1.txt",
+          "Pattern1SlidingWindowQ8I1.txt",
+          "Pattern1SlidingWindowQ9I1.txt",
+          "Pattern1SlidingWindowQ10I1.txt",
+          "Pattern2TwoPointersQ1I1.txt",
+          "Pattern2TwoPointersQ2I1.txt",
+          "Pattern2TwoPointersQ3I1.txt",
+          "Pattern2TwoPointersQ4I1.txt",
+          "Pattern2TwoPointersQ5I1.txt",
+        ]
+      }
+    ]
+  }
+
+  
