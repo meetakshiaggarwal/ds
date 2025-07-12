@@ -1,24 +1,31 @@
 <div class="container">
   <h1>Sliding Window Visualizer</h1>
 
-  <label>
-    Select a Problem:
-    <select [(ngModel)]="selectedProblem">
-      <option *ngFor="let p of problems" [value]="p.id">{{ p.label }}</option>
-    </select> 
-  </label>
+  <div class="controls-section">
+    <label for="problemSelect">
+      Select a Problem:
+      <select name="selectedProblem" [(ngModel)]="selectedProblem" (change)="onProblemChange()">
+        <option *ngFor="let p of problems" [value]="p.id">{{ p.label }}</option>
+      </select>
+    </label>
 
-  <label>
-    Array: 
-    <input [(ngModel)]="inputArray" placeholder="[1,2,3]" />
-  </label>
+    <label for="inputArray">
+      Input:
+      <input name="inputArray" type="text" [(ngModel)]="inputArray" placeholder="[1,2,3]" />
+    </label>
 
-  <label>
-    K / Target: 
-    <input type="number" [(ngModel)]="k" />
-  </label>
+    <label for="kInput">
+      K / Target:
+      <input name="k" type="number" [(ngModel)]="k" />
+    </label>
 
-  <button (click)="run()">Run</button>
+    <label *ngIf="selectedProblem === 'string_permutation'" for="patternInput">
+      Pattern:
+      <input name="pattern" [(ngModel)]="pattern" placeholder="abc" />
+    </label>
+
+    <button (click)="run()">Run</button>
+  </div>
 
   <app-visualizer [steps]="steps" [speed]="1000"></app-visualizer>
 
