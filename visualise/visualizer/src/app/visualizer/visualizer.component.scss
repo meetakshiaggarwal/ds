@@ -1,86 +1,239 @@
-$avg-color: #d0ebff;
-$max-color: #d3f9d8;
-$min-color: #fff3bf;
-$distinct-color: #fde2e4;
-$norepeat-color: #f3d5ff;
+// Define colors for various modes
+$avg-color: #e6f7ff;
+$max-color: #e0ffe6;
+$min-color: #fffbe6;
+$distinct-color: #ffe6e6;
+$fruits-color: #f0e6ff; // New color for fruits in basket
+$norepeat-color: #e6f2ff;
+$replacement-color: #fff0e6; // New for replacement problems
+$max-ones-color: #e6ffe0; // New for max ones problem
+$permutation-color: #ffebcc; // New for permutation problem
 
+// Pointer and highlight colors
 $pointer-color: #339af0;
+$window-start-color: #007bff; // A distinct blue
+$window-end-color: #dc3545;   // A distinct red
+
 $highlight-border: 2px solid $pointer-color;
-$default-border: 1px solid #aaa;
-$radius: 4px;
+$default-border: 1px solid #ced4da; // Lighter default border
+$radius: 6px; // Slightly larger radius for softer look
+
+// General container styling for better aesthetics
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #343a40;
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 20px auto;
+  border: 1px solid #e0e0e0; // Subtle border around the component
+}
+
+h3 {
+  text-align: center;
+  color: #212529;
+  margin-bottom: 25px;
+  font-size: 1.6em; // Slightly smaller for more text
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+  font-weight: 600;
+}
 
 .array-display {
   display: flex;
-  margin: 20px 0;
+  justify-content: center; // Center the array elements
+  align-items: flex-start; // Align items at the start if wrap occurs
+  margin: 30px 0 50px 0; // More space for pointers
   flex-wrap: wrap;
+  gap: 10px; // Spacing between elements
+
+  .array-item-container {
+    position: relative; // Crucial for positioning pointers
+    display: flex;
+    flex-direction: column; // Stack pointer and array element
+    align-items: center;
+    margin-bottom: 30px; // Make space for pointers below
+  }
 
   span {
-    margin: 5px;
-    padding: 10px;
-    width: 32px;
-    height: 32px;
-    line-height: 12px;
-    text-align: center;
-    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px; // Slightly larger for better visibility
+    height: 48px;
+    font-size: 18px; // Larger font
     border: $default-border;
     border-radius: $radius;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out; // Smooth transitions for all properties
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); // More prominent shadow
+    background-color: #f8f9fa; // Default background
+    color: #333; // Default text color
 
-    &.pointer {
-      border: $highlight-border;
-      background-color: $pointer-color;
+    &.in-window {
+      // Styles for elements currently inside the window
+      border: 2px solid $pointer-color;
+      background-color: lighten($pointer-color, 45%); // Lighter shade of pointer color
+      box-shadow: 0 0 12px rgba($pointer-color, 0.3); // Soft glow
+      transform: scale(1.03); // Slightly larger
+    }
+
+    // Mode-specific background colors for elements within the window
+    &.avg-mode.in-window { background-color: $avg-color; border-color: darken($avg-color, 20%); }
+    &.max-mode.in-window { background-color: $max-color; border-color: darken($max-color, 20%); }
+    &.min-mode.in-window { background-color: $min-color; border-color: darken($min-color, 20%); }
+    &.distinct-mode.in-window { background-color: $distinct-color; border-color: darken($distinct-color, 20%); }
+    &.fruits-mode.in-window { background-color: $fruits-color; border-color: darken($fruits-color, 20%); }
+    &.norepeat-mode.in-window { background-color: $norepeat-color; border-color: darken($norepeat-color, 20%); }
+    &.replacement-mode.in-window { background-color: $replacement-color; border-color: darken($replacement-color, 20%); }
+    &.max-ones-mode.in-window { background-color: $max-ones-color; border-color: darken($max-ones-color, 20%); }
+    &.permutation-mode.in-window { background-color: $permutation-color; border-color: darken($permutation-color, 20%); }
+  }
+
+  .pointer {
+    position: absolute;
+    font-size: 0.75em;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap; // Prevent text wrap
+    z-index: 10;
+    transition: top 0.3s ease, bottom 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); // Add shadow to pointers
+
+    &.start-pointer {
+      background-color: $window-start-color;
       color: white;
+      top: -30px; // Position above the element
+      left: 50%;
+      transform: translateX(-50%);
+      &:after { // Small triangle pointing down
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid $window-start-color;
+      }
     }
 
-    &.avg-mode {
-      background-color: $avg-color;
-    }
-
-    &.max-mode {
-      background-color: $max-color;
-    }
-
-    &.min-mode {
-      background-color: $min-color;
-    }
-
-    &.distinct-mode {
-      background-color: $distinct-color;
-    }
-
-    &.norepeat-mode {
-      background-color: $norepeat-color;
+    &.end-pointer {
+      background-color: $window-end-color;
+      color: white;
+      bottom: -30px; // Position below the element
+      left: 50%;
+      transform: translateX(-50%);
+      &:after { // Small triangle pointing up
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid $window-end-color;
+      }
     }
   }
 }
 
 .variables {
-  margin: 15px 0;
+  margin: 25px 0;
+  padding: 18px;
+  border: 1px solid #e9ecef;
+  border-radius: $radius;
+  background-color: #fcfcfc;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+  display: grid; // Use grid for better layout of variables
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); // Responsive columns
+  gap: 15px;
 
   div {
-    margin-bottom: 6px;
+    margin-bottom: 0; // Reset margin-bottom for grid items
+    font-size: 1.05em;
+    display: flex;
+    align-items: baseline; // Align text properly
+    word-break: break-word; // Break long words if necessary
+
     strong {
-      font-weight: 600;
+      font-weight: 700;
       color: #495057;
+      min-width: 120px; // Give some consistent width for labels
+      margin-right: 10px;
+      flex-shrink: 0; // Prevent shrinking
     }
+
+    span {
+      flex-grow: 1; // Allow value to take remaining space
+    }
+  }
+
+  .variable-changed {
+    font-weight: bold;
+    animation: pulse-text 0.6s ease-in-out forwards; // Animation for the text
+    display: inline-block; // Ensure transform works
+  }
+
+  .variable-changed-value {
+    background-color: #fff0b3; // Background highlight for the changed value
+    padding: 3px 8px;
+    border-radius: 5px;
+    animation: fade-highlight 1.2s forwards; // Animation for the background
+    display: inline-block; // Ensure padding and background work
+    min-width: 20px; // Prevent collapse during animation
+    text-align: center;
   }
 }
 
 .controls {
-  margin-top: 10px;
+  margin-top: 30px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
 
   button {
-    margin: 0 6px;
-    padding: 5px 12px;
-    font-size: 16px;
-    border-radius: 4px;
-    background: #f1f3f5;
-    border: 1px solid #ccc;
+    margin: 0 10px;
+    padding: 10px 22px;
+    font-size: 17px;
+    border-radius: 50px; // More rounded buttons
+    background: #e9ecef;
+    border: 1px solid #ced4da;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    color: #495057;
+    outline: none; // Remove outline on focus
 
     &:hover {
       background: #dee2e6;
+      border-color: #adb5bd;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px); // Lift effect
+    }
+
+    &:active {
+      transform: translateY(0); // Press effect
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
     }
   }
+}
+
+// Keyframe animations for variable updates
+@keyframes pulse-text {
+  0% { transform: scale(1); color: #495057; }
+  50% { transform: scale(1.05); color: #e03131; } // Red pulse
+  100% { transform: scale(1); color: #495057; }
+}
+
+@keyframes fade-highlight {
+  0% { background-color: #fff0b3; }
+  100% { background-color: transparent; }
 }

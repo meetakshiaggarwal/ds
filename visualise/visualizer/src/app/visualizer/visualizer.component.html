@@ -1,35 +1,51 @@
 <div *ngIf="currentStep">
-  <h3>Step {{ currentStepIndex + 1 }} / {{ steps.length }}</h3>
+  <h3>Step {{ currentStepIndex + 1 }} / {{ steps.length }} - {{ currentStep.action }}</h3>
 
   <div class="array-display">
-    <span
-      *ngFor="let val of currentStep.arr; let i = index"
-      [ngClass]="{
-        pointer: i === currentStep.windowStart || i === currentStep.windowEnd,
-        'avg-mode': currentStep.mode === 'average',
-        'max-mode': currentStep.mode === 'max',
-        'min-mode': currentStep.mode === 'min',
-        'distinct-mode': currentStep.mode === 'distinct',
-        'norepeat-mode': currentStep.mode === 'norepeat'
-      }"
-    >
-      {{ val }}
-    </span>
+    <ng-container *ngFor="let val of currentStep.arr; let i = index">
+      <div class="array-item-container">
+        <div *ngIf="i === currentStep.windowStart" class="pointer start-pointer">
+          windowStart
+        </div>
+
+        <span
+          [ngClass]="{
+            'in-window': i >= currentStep.windowStart && i <= currentStep.windowEnd,
+            'avg-mode': currentStep.mode === 'average',
+            'max-mode': currentStep.mode === 'max',
+            'min-mode': currentStep.mode === 'min',
+            'distinct-mode': currentStep.mode === 'distinct',
+            'fruits-mode': currentStep.mode === 'fruits',
+            'norepeat-mode': currentStep.mode === 'norepeat',
+            'replacement-mode': currentStep.mode === 'replacement',
+            'max-ones-mode': currentStep.mode === 'max-ones',
+            'permutation-mode': currentStep.mode === 'permutation'
+          }"
+        >
+          {{ val }}
+        </span>
+
+        <div *ngIf="i === currentStep.windowEnd" class="pointer end-pointer">
+          windowEnd
+        </div>
+      </div>
+    </ng-container>
   </div>
 
   <div class="variables">
     <div *ngFor="let key of getKeys(currentStep)">
-      <ng-container *ngIf="key !== 'arr' && key !== 'mode'">
-        <strong>{{ key }}:</strong> {{ currentStep[key] }}
+      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action'">
+        <strong>{{ key }}:</strong>
+        <span [ngClass]="{'variable-changed': hasVariableChanged(key)}">{{ formatVariable(currentStep[key]) }}</span>
       </ng-container>
     </div>
   </div>
 
   <div class="controls">
-    <button (click)="prev()">⏮</button>
-    <button (click)="play()">▶️</button>
-    <button (click)="pause()">⏸</button>
-    <button (click)="next()">⏭</button>
-    <button (click)="stop()">⏹</button>
+    <button (click)="prev()">⏮ Prev</button>
+    <button (click)="play()">▶️ Play</button>
+    <button (click)="pause()">⏸ Pause</button>
+    <button (click)="next()">⏭ Next</button>
+    <button (click)="stop()">⏹ Stop</button>
   </div>
 </div>
