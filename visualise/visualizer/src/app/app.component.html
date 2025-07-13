@@ -27,6 +27,14 @@
     <button (click)="run()">Run</button>
   </div>
 
-  <app-visualizer [steps]="steps" [speed]="1000"></app-visualizer>
+  <div class="content-display">
+    <div class="visualizer-panel">
+      <app-visualizer [steps]="steps"></app-visualizer>
+    </div>
+    <div class="code-editor">
+      <h3>Algorithm Code</h3>
+      <pre><code>{{ selectedProblemCode }}</code></pre>
+    </div>
+  </div>
 
 </div>
