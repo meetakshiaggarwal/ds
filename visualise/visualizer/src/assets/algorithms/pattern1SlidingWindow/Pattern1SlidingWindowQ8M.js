@@ -7,9 +7,6 @@
  * 4. if windowLen > maxFreqChar + k, then these chars cannot be replaced, so slide window by 1 char
  * 5. check maxSubstrLen = max substrlen, currWindowSize
  */
-
-import fs from 'fs'
-
 function longestSubstringWithSameLetterWithKReplacements(str,k) {
     let maxLength = -1
     for(let windowEnd=0,windowStart=0, charFreqMap = {}, maxFreq=0; windowEnd<str.length; windowEnd++) {
@@ -25,9 +22,3 @@ function longestSubstringWithSameLetterWithKReplacements(str,k) {
     }
     return maxLength
 }
-
-const inputPath = process.argv[2]
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n')
-const str = input[0]
-const k = Number(input[1])
-console.log(longestSubstringWithSameLetterWithKReplacements(str,k))

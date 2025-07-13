@@ -21,7 +21,7 @@
 
     <label *ngIf="selectedProblem === 'string_permutation'" for="patternInput">
       Pattern:
-      <input name="pattern" [(ngModel)]="pattern" placeholder="abc" />
+      <input name="pattern" type="text" [(ngModel)]="pattern" placeholder="abc" />
     </label>
 
     <button (click)="run()">Run</button>

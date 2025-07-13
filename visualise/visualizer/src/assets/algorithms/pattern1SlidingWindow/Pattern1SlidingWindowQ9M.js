@@ -7,9 +7,6 @@
  * 4. if windowLen > freqMap + k, then these 0's cannot be replaced, so slide window by 1 num
  * 5. check maxLen = max maxLen, currWindowSize
  */
-
-import fs from 'fs'
-
 function maxOnesWithKReplacements(arr,k) {
     let maxLength = -1
     for(let windowEnd=0,windowStart=0, maxOnesCount=0; windowEnd<arr.length; windowEnd++) {
@@ -22,9 +19,3 @@ function maxOnesWithKReplacements(arr,k) {
     }
     return maxLength
 }
-
-const inputPath = process.argv[2]
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n')
-const arr = input[0].split(',')
-const k = Number(input[1])
-console.log(maxOnesWithKReplacements(arr,k))

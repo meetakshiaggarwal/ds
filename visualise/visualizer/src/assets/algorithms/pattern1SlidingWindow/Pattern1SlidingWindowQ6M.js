@@ -3,14 +3,26 @@
  * -----------------------------------------------------
  * Same as Q4
  */
-
-import fs from 'fs'
-
 function longestSubstring(str) {
     longestSubstringLengthKDistinctChars(str,2)
 }
 
-const inputPath = process.argv[2]
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n')
-const str = input[0]
-console.log(longestSubstring(str))
+/**
+ * function longestSubstringLengthKDistinctChars(str, k) {
+    let maxLength = -1, charFreqMap = {};
+    for(let windowEnd=0, windowStart=0; windowEnd<str.length; windowEnd++) {
+        let endChar = str[windowEnd];
+        charFreqMap[endChar] = endChar in charFreqMap ? charFreqMap[endChar] + 1 : 1;
+        while(Object.keys(charFreqMap).length > k) {//Algo complx - depends on the value of k - calculating the size of the map
+            let startChar = str[windowStart];
+            charFreqMap[startChar]--;
+            windowStart++;
+            if(charFreqMap[startChar] == 0) {
+                delete charFreqMap[startChar];
+            }
+        }
+        maxLength = Math.max(maxLength, windowEnd - windowStart + 1);
+    }
+    return maxLength;
+}
+*/

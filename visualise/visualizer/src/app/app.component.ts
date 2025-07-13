@@ -163,27 +163,27 @@ selectedProblem = 'avg';
         smallestSubArray(processedArray as number[], this.k as number, logStep);
         break;
       case 'k_distinct_chars':
-        // longestSubstringLengthKDistinctChars(processedArray as string, this.k as number, logStep);
+        longestSubstringLengthKDistinctChars(processedArray as string, this.k as number, logStep);
         console.log('K Distinct Chars not yet visualized.');
         break;
       case 'fruits_basket':
-        // fruitsInBasket(processedArray as number[], this.k as number, logStep);
+        fruitsInBasket(processedArray as number[], this.k as number, logStep);
         console.log('Fruits in Basket not yet visualized.');
         break;
       case 'two_distinct_chars':
-        // longestSubstring(processedArray as string, logStep);
+        longestSubstring(processedArray as string, logStep);
         console.log('Two Distinct Chars not yet visualized.');
         break;
       case 'no_repeat_substring':
-        // longestSubstringWithoutRepeatingChars(processedArray as string, logStep);
+        longestSubstringWithoutRepeatingChars(processedArray as string, logStep);
         console.log('No Repeat Substring not yet visualized.');
         break;
       case 'longest_replacement':
-        // longestSubstringWithSameLetterWithKReplacements(processedArray as string, this.k as number, logStep);
+        longestSubstringWithSameLetterWithKReplacements(processedArray as string, this.k as number, logStep);
         console.log('Longest Replacement not yet visualized.');
         break;
       case 'max_ones_replacement':
-        // maxOnesWithKReplacements(processedArray as number[], this.k as number, logStep);
+        maxOnesWithKReplacements(processedArray as number[], this.k as number, logStep);
         console.log('Max Ones Replacement not yet visualized.');
         break;
       case 'string_permutation':

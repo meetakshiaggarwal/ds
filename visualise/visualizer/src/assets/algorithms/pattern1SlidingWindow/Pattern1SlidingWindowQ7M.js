@@ -7,9 +7,6 @@
  *     if exist - slide window to +1 pos of char (since the char can already be there in the map - legacy val - but start is updated before)
  * 3. update maxLen
  */
-
-import fs from 'fs'
-
 function longestSubstringWithoutRepeatingChars(str) {
     let maxLength=0, charPositionMap={}
     for(let windowEnd=0,windowStart=0; windowEnd<str.length; windowEnd++) {
@@ -22,8 +19,3 @@ function longestSubstringWithoutRepeatingChars(str) {
     }
     return maxLength
 }
-
-const inputPath = process.argv[2]
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n')
-const str = input[0]
-console.log(longestSubstringWithoutRepeatingChars(str))
