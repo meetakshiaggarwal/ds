@@ -26,12 +26,12 @@ $radius: 6px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #343a40;
   background-color: transparent; // Make background transparent, parent (visualizer-panel) will have the card styling
-  padding: 0; // Remove padding, parent (visualizer-panel) will have it
-  border-radius: 0; // Remove border-radius
-  box-shadow: none; // Remove box-shadow
-  max-width: 100%; // Ensure it fits within its parent
-  margin: 0 auto; // --- IMPORTANT CHANGE: Remove explicit margin from here ---
-  border: none; // Remove border
+  padding: 0; 
+  border-radius: 0; 
+  box-shadow: none; 
+  max-width: 100%; 
+  margin: 0 auto; 
+  border: none; 
 }
 
 h3 {

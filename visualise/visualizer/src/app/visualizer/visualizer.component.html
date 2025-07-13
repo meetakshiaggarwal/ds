@@ -33,12 +33,14 @@
   </div>
 
   <div class="variables">
-    <div *ngFor="let key of getKeys(currentStep)">
+    <ng-container *ngFor="let key of getKeys(currentStep)">
       <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action'">
-        <strong>{{ key }}:</strong>
-        <span [ngClass]="{'variable-changed': hasVariableChanged(key)}">{{ formatVariable(currentStep[key]) }}</span>
+        <div>
+          <strong>{{ key }}:</strong>
+          <span [ngClass]="{'variable-changed': hasVariableChanged(key)}">{{ formatVariable(currentStep[key]) }}</span>
+        </div>
       </ng-container>
-    </div>
+    </ng-container>
   </div>
 
   <div class="controls">

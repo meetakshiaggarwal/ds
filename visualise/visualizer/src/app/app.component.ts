@@ -41,7 +41,7 @@ export class AppComponent implements OnInit { // Implement OnInit
     { id: 'string_permutation', label: '10. Permutation in a String (M) LC567', filename: 'Pattern1SlidingWindowQ10M.js' }
   ];
 
-selectedProblem = 'avg';
+  selectedProblem = 'avg';
   steps: any[] = [];
   inputArray: any;
   k: number | null = null;
@@ -49,16 +49,17 @@ selectedProblem = 'avg';
   currentStepIndex: number = 0;
   selectedProblemCode: string = '';
 
-  constructor(private http: HttpClient) {} // Inject HttpClient
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.updateInputsForProblem();
-    this.loadAlgorithmCode(); // Load code on init
+    this.loadAlgorithmCode();
+    this.run();
   }
 
   onProblemChange() {
     this.updateInputsForProblem();
-    this.loadAlgorithmCode(); // Load new code when problem changes
+    this.loadAlgorithmCode();
     this.run();
   }
 
@@ -115,7 +116,6 @@ selectedProblem = 'avg';
   loadAlgorithmCode() {
     const problem = this.problems.find(p => p.id === this.selectedProblem);
     if (problem && problem.filename) {
-      // Construct the path to the file in the assets folder
       const filePath = `assets/algorithms/pattern1SlidingWindow/${problem.filename}`;
       this.http.get(filePath, { responseType: 'text' }).subscribe(
         code => {
@@ -187,7 +187,7 @@ selectedProblem = 'avg';
         console.log('Max Ones Replacement not yet visualized.');
         break;
       case 'string_permutation':
-        // stringPermutation(processedArray as string, this.pattern as string, logStep);
+        findPermutation(processedArray as string, this.pattern as string, logStep);
         console.log('String Permutation not yet visualized.');
         break;
       default:
