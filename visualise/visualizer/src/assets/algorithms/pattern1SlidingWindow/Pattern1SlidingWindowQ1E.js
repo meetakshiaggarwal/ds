@@ -9,11 +9,11 @@
  */
 function findAvgSubArrays(arr, k) {
     let subArrAvgs = [];
-    for(let winEnd=0, winStart=0, winSum=0; winEnd<arr.length; winEnd++) {
-        winSum += arr[winEnd];
-        if(winEnd >= k-1) {
-            subArrAvgs[winStart] = formatAvg(winSum/k);
-            winSum -= arr[winStart++];
+    for(let windowEnd=0, windowStart=0, windowSum=0; windowEnd<arr.length; windowEnd++) {
+        windowSum += arr[windowEnd];
+        if(windowEnd >= k-1) {
+            subArrAvgs[windowStart] = formatAvg(windowSum/k);
+            windowSum -= arr[windowStart++];
         }
     }
     return subArrAvgs;

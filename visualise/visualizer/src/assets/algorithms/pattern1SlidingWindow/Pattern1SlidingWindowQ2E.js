@@ -8,14 +8,14 @@
  */
 function getMaxSumOfSubarray(arr, k) {
     let maxSum = 0;
-    for (let winEnd = 0, winStart = 0, winSum = 0; winEnd < arr.length; winEnd++) {
-        winSum += arr[winEnd];
-        if (winEnd >= k - 1) {
-            if (winSum > maxSum) {
-                maxSum = winSum;
+    for (let windowEnd = 0, windowStart = 0, windowSum = 0; windowEnd < arr.length; windowEnd++) {
+        windowSum += arr[windowEnd];
+        if (windowEnd >= k - 1) {
+            if (windowSum > maxSum) {
+                maxSum = windowSum;
             }
-            winSum -= arr[winStart];
-            winStart++;
+            windowSum -= arr[windowStart];
+            windowStart++;
         }
     }
     return maxSum;
