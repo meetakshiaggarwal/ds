@@ -34,7 +34,7 @@
 
   <div class="variables">
     <ng-container *ngFor="let key of getKeys(currentStep)">
-      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action'">
+      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action' && key !== 'codeLines'">
         <div>
           <strong>{{ key }}:</strong>
           <span [ngClass]="{'variable-changed': hasVariableChanged(key)}">{{ formatVariable(currentStep[key]) }}</span>
@@ -45,9 +45,14 @@
 
   <div class="controls">
     <button (click)="prev()">⏮ Prev</button>
-    <button (click)="play()">▶️ Play</button>
-    <button (click)="pause()">⏸ Pause</button>
+    <button (click)="togglePlayPause()">{{ isPlaying ? '⏸ Pause' : '▶ Play' }}</button>
     <button (click)="next()">⏭ Next</button>
     <button (click)="stop()">⏹ Stop</button>
   </div>
+</div>
+<div *ngIf="!currentStep && steps.length > 0" class="no-steps-message">
+  Visualization finished. Press 'Play' or 'Next' to restart from the beginning, or 'Run' a new problem.
+</div>
+<div *ngIf="steps.length === 0" class="no-steps-message">
+  Run a problem to see the visualization steps here.
 </div>

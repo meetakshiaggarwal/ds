@@ -1,14 +1,8 @@
-/**
- * Longest Substring length with at most 2 distinct characters
- * -----------------------------------------------------
- * Same as Q4
- */
 function longestSubstring(str) {
     longestSubstringLengthKDistinctChars(str,2)
 }
 
-/**
- * function longestSubstringLengthKDistinctChars(str, k) {
+function longestSubstringLengthKDistinctChars(str, k) {
     let maxLength = -1, charFreqMap = {};
     for(let windowEnd=0, windowStart=0; windowEnd<str.length; windowEnd++) {
         let endChar = str[windowEnd];
@@ -25,4 +19,3 @@ function longestSubstring(str) {
     }
     return maxLength;
 }
-*/

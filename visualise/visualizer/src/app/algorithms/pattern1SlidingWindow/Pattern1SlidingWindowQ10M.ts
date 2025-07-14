@@ -1,118 +1,118 @@
-/**
- * Permutations in a string
- * ------------------------------------------------
- * Input: str, pattern
- * Output: boolean (does str contain any permutation of pattern)
- * * Algo - Sliding Window with HashMap
- * 1. Build char frequency map for the pattern.
- * 2. Iterate through the string with a sliding window.
- * 3. Expand window: add char to window map. If it matches a pattern char, decrement `matched` count.
- * 4. If `matched` == pattern map size, a permutation is found.
- * 5. Shrink window: remove char from window map. If it was a pattern char, increment `matched` count.
- */
-
-// Remove 'import fs from 'fs';'
 export function findPermutation(str, pattern, logStep) {
-    let windowStart = 0;
-    let matched = 0; // Number of characters matched from the pattern
-    let patternCharFreq = {};
+    let windowStart = 0; // Line 1
+    let matched = 0; // Line 2
+    let patternCharFreq = {}; // Line 3
 
-    for (let i = 0; i < pattern.length; i++) {
-        const char = pattern[i];
-        patternCharFreq[char] = (patternCharFreq[char] || 0) + 1;
+    // Populate pattern character frequency map
+    for (let i = 0; i < pattern.length; i++) { // Line 4
+        const char = pattern[i]; // Line 5
+        patternCharFreq[char] = (patternCharFreq[char] || 0) + 1; // Line 6
     }
-
     logStep({
         arr: [...str],
-        windowStart: windowStart,
-        windowEnd: -1, // No window yet
         pattern: pattern,
         patternCharFreq: { ...patternCharFreq },
-        matchedChars: matched,
-        mode: 'permutation', // New mode
-        action: 'Initializing pattern frequency map'
+        windowStart: 0,
+        windowEnd: -1,
+        matched: matched,
+        mode: 'permutation',
+        action: `Initializing pattern frequency map: ${JSON.stringify(patternCharFreq)}.`,
+        codeLines: [1, 2, 3, 4, 5, 6]
     });
 
-    for (let windowEnd = 0; windowEnd < str.length; windowEnd++) {
-        let rightChar = str[windowEnd];
-
+    for (let windowEnd = 0; windowEnd < str.length; windowEnd++) { // Line 7
+        let rightChar = str[windowEnd]; // Line 8
         logStep({
             arr: [...str],
-            windowStart: windowStart,
-            windowEnd: windowEnd,
             pattern: pattern,
             patternCharFreq: { ...patternCharFreq },
-            currentWindow: str.substring(windowStart, windowEnd + 1),
-            matchedChars: matched,
+            windowStart: windowStart,
+            windowEnd: windowEnd,
+            rightChar: rightChar,
+            matched: matched,
             mode: 'permutation',
-            action: 'Expanding window, adding ' + rightChar
+            action: `Processing '${rightChar}'.`,
+            codeLines: [7, 8]
         });
 
-        if (rightChar in patternCharFreq) {
-            patternCharFreq[rightChar]--;
-            if (patternCharFreq[rightChar] >= 0) { // Character matched, not overused
-                matched++;
+        if (rightChar in patternCharFreq) { // Line 9
+            patternCharFreq[rightChar]--; // Line 10
+            if (patternCharFreq[rightChar] >= 0) { // Line 11
+                matched++; // Line 12
             }
-        }
-
-        if (matched === pattern.length) {
             logStep({
                 arr: [...str],
+                pattern: pattern,
+                patternCharFreq: { ...patternCharFreq },
                 windowStart: windowStart,
                 windowEnd: windowEnd,
-                pattern: pattern,
-                patternCharFreq: { ...patternCharFreq },
-                currentWindow: str.substring(windowStart, windowEnd + 1),
-                matchedChars: matched,
-                result: true, // Found permutation!
+                rightChar: rightChar,
+                matched: matched,
                 mode: 'permutation',
-                action: 'PERMUTATION FOUND! ' + str.substring(windowStart, windowEnd + 1)
+                action: `'${rightChar}' is in pattern. Decremented freq. Matched count: ${matched}.`,
+                codeLines: [9, 10, 11, 12]
             });
-            return true; // Found a permutation
         }
 
-        // Shrink the sliding window
-        if (windowEnd >= pattern.length - 1) {
-            let leftChar = str[windowStart];
-            windowStart++;
-
-            if (leftChar in patternCharFreq) {
-                if (patternCharFreq[leftChar] >= 0) { // Character was matched
-                    matched--;
-                }
-                patternCharFreq[leftChar]++;
-            }
-
+        if (matched === pattern.length) { // Line 13
             logStep({
                 arr: [...str],
-                windowStart: windowStart, // Updated windowStart
+                pattern: pattern,
+                result: true,
+                windowStart: windowStart,
                 windowEnd: windowEnd,
+                matched: matched,
+                mode: 'permutation',
+                action: `Matched all characters! Permutation found.`,
+                codeLines: [13, 14]
+            });
+            return true; // Line 14
+        }
+
+        if (windowEnd >= pattern.length - 1) { // Line 15 (Shrink window if size matches pattern length)
+            let leftChar = str[windowStart]; // Line 16
+            windowStart++; // Line 17
+            logStep({
+                arr: [...str],
                 pattern: pattern,
                 patternCharFreq: { ...patternCharFreq },
-                currentWindow: str.substring(windowStart, windowEnd + 1),
-                matchedChars: matched,
+                windowStart: windowStart, // Updated windowStart
+                windowEnd: windowEnd,
+                leftChar: leftChar,
+                matched: matched,
                 mode: 'permutation',
-                action: 'Shrinking window, removing ' + leftChar
+                action: `Window reached pattern length. Shrinking window, removed '${leftChar}'.`,
+                codeLines: [15, 16, 17]
             });
+
+            if (leftChar in patternCharFreq) { // Line 18
+                if (patternCharFreq[leftChar] >= 0) { // Line 19
+                    matched--; // Line 20
+                }
+                patternCharFreq[leftChar]++; // Line 21
+                logStep({
+                    arr: [...str],
+                    pattern: pattern,
+                    patternCharFreq: { ...patternCharFreq },
+                    windowStart: windowStart,
+                    windowEnd: windowEnd,
+                    leftChar: leftChar,
+                    matched: matched,
+                    mode: 'permutation',
+                    action: `'${leftChar}' was in pattern. Incremented freq. Matched count: ${matched}.`,
+                    codeLines: [18, 19, 20, 21]
+                });
+            }
         }
     }
+    // Final step if loop finishes without finding permutation
     logStep({
         arr: [...str],
-        windowStart: windowStart, // Or -1
-        windowEnd: str.length - 1, // Or -1
         pattern: pattern,
-        result: false, // No permutation found
+        result: false,
         mode: 'permutation',
-        action: 'Final Result: No permutation found'
+        action: `Algorithm finished. No permutation found.`,
+        codeLines: [22] // Highlight return
     });
-    return false; // No permutation found
+    return false; // Line 22
 }
-
-// Remove fs-related code
-/*
-const inputPath = process.argv[2];
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n');
-const str = input[0];
-const pattern = input[1];
-console.log(findPermutation(str, pattern));
-*/

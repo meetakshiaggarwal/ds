@@ -15,7 +15,7 @@ $border-radius-common: 8px;
 $input-element-height: 40px;
 $gap-size: 15px;
 $content-gap: 25px;
-$section-vertical-gap: 35px; // Consistent gap between major sections
+$section-vertical-gap: 35px;
 
 .container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -38,14 +38,14 @@ h1 {
   padding-bottom: 15px;
 }
 
-.controls-section { // Corrected class name as per your HTML
+.controls-section {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: $gap-size;
   justify-content: center;
   align-items: flex-end;
-  margin-bottom: $section-vertical-gap; // Consistent spacing below this section
+  margin-bottom: $section-vertical-gap;
   padding: 20px;
   background-color: $light-gray;
   border-radius: $border-radius-common - 2px;
@@ -140,26 +140,24 @@ button {
   flex-wrap: wrap;
   gap: $content-gap;
   justify-content: center;
-  align-items: stretch; // Ensures both panels stretch to the same height
-  margin-top: 0; // Remove top margin from content-display, spacing comes from controls-section's margin-bottom
+  align-items: stretch;
+  margin-top: 0;
 }
 
 .visualizer-panel {
-  flex: 2; // Takes more space than code-editor
+  flex: 2;
   min-width: 450px;
   max-width: 100%;
   box-sizing: border-box;
-  // --- ADDED STYLES TO MATCH CODE-EDITOR CARD ---
   background-color: #f5f5f5;
   border: 1px solid #e0e0e0;
   border-radius: $border-radius-common;
-  padding: 15px; // Consistent internal padding with code-editor
+  padding: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  // ---------------------------------------------
 }
 
 .code-editor {
-  flex: 1; // Takes less space than visualizer-panel
+  flex: 1;
   min-width: 350px;
   max-width: 100%;
   background-color: #f5f5f5;
@@ -172,10 +170,11 @@ button {
   overflow-x: auto;
   overflow-y: auto;
   box-sizing: border-box;
+  max-height: 500px;
 
   h3 {
     text-align: center;
-    color: #212529;
+    color: $heading-color;
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.2em;
@@ -185,9 +184,38 @@ button {
   }
 
   pre {
-    margin: 0;
-    padding: 0;
-    white-space: pre-wrap;
-    word-break: break-all;
+    line-height: 20px;
+  }
+
+  span.line-number {
+    margin-right: 10px;
+  }
+  
+  code {
+    display: block;
+    line-height: inherit;
+  }
+
+  .highlighted-line {
+    background-color: #fffacd;
+    font-weight: bold;
+    animation: fade-in-highlight 0.5s ease-out forwards;
+  }
+
+  @keyframes fade-in-highlight {
+    from { background-color: transparent; }
+    to { background-color: #fffacd; }
+  }
+}
+
+@media (max-width: 900px) {
+  .content-display {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .visualizer-panel, .code-editor {
+    min-width: unset;
+    width: 100%;
   }
 }

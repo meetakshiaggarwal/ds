@@ -1,96 +1,82 @@
-/**
- * Fruits into basket
- * --------------------
- * Same as Q4
- * * Input: fruits,k
- * [1,2,4,3,2,1,2,1,2,2,3], 2
- * O/P - maxFruitCount
- * * Algo - Sliding Window
- * Maintain
- * - hashmap (freq of fruits from tree),
- * - maxFruitCount
- * * 1. Loop the fruits-tree arr
- * 2. Add the fruit to map (increase freq if already exist)
- * 3. if k(2) > map size,
- * - decrease freq (if freq 0 - remove from map),
- * - reduce window size
- * 4. if k(2) == map size, update maxFruitCount to max of (maxFruitCount, currWindowFreq)
- */
-
-// Remove 'import fs from 'fs';'
-/**since k is small = 2, this can work fine as the freq Map size will be less = 2 */
 export function fruitsInBasket(fruits, k, logStep) {
-    let maxFruitCount = 0;
-    let basketMap = new Map();
-    let windowStart = 0;
+    let maxFruitCount = 0; // Line 1
+    let basketMap = new Map(); // Line 2
+    let windowStart = 0; // Line 3
 
-    for(let windowEnd = 0; windowEnd < fruits.length; windowEnd++) {
-        let endFruit = fruits[windowEnd];
-        basketMap.set(endFruit, (basketMap.get(endFruit) || 0) + 1);
-
-        logStep({
-            arr: [...fruits],
-            windowStart: windowStart,
-            windowEnd: windowEnd,
-            basketMap: Object.fromEntries(basketMap), // Convert Map to object for visualization
-            distinctFruitsInBasket: basketMap.size,
-            k: k,
-            maxFruitCount: maxFruitCount,
-            mode: 'fruits', // New mode for specific styling
-            action: 'Expanding window, adding fruit ' + endFruit
-        });
-
-        while(basketMap.size > k) {
-            let startFruit = fruits[windowStart];
-            basketMap.set(startFruit, basketMap.get(startFruit) - 1);
-            if(basketMap.get(startFruit) === 0) {
-                basketMap.delete(startFruit);
-            }
-            windowStart++;
-
-            logStep({
-                arr: [...fruits],
-                windowStart: windowStart,
-                windowEnd: windowEnd,
-                basketMap: Object.fromEntries(basketMap),
-                distinctFruitsInBasket: basketMap.size,
-                k: k,
-                maxFruitCount: maxFruitCount,
-                mode: 'fruits',
-                action: 'Shrinking window, removing fruit ' + startFruit + ' (too many distinct fruits)'
-            });
-        }
-        maxFruitCount = Math.max(maxFruitCount, windowEnd - windowStart + 1);
-
-        logStep({
-            arr: [...fruits],
-            windowStart: windowStart,
-            windowEnd: windowEnd,
-            basketMap: Object.fromEntries(basketMap),
-            distinctFruitsInBasket: basketMap.size,
-            k: k,
-            currentWindowLength: windowEnd - windowStart + 1,
-            maxFruitCount: maxFruitCount, // Highlight update if changed
-            mode: 'fruits',
-            action: 'Updating maxFruitCount'
-        });
-    }
+    // Initial step
     logStep({
         arr: [...fruits],
-        windowStart: windowStart, // Or -1
-        windowEnd: fruits.length - 1, // Or -1
+        k: k,
+        maxFruitCount: maxFruitCount,
+        basketMap: Object.fromEntries(basketMap),
+        distinctFruitsInBasket: 0,
+        windowStart: 0,
+        windowEnd: -1,
+        mode: 'fruits',
+        action: 'Initializing variables.',
+        codeLines: [1, 2, 3]
+    });
+
+    for(let windowEnd = 0; windowEnd < fruits.length; windowEnd++) { // Line 4
+        let endFruit = fruits[windowEnd]; // Line 5
+        basketMap.set(endFruit, (basketMap.get(endFruit) || 0) + 1); // Line 6
+
+        logStep({
+            arr: [...fruits],
+            k: k,
+            maxFruitCount: maxFruitCount,
+            basketMap: Object.fromEntries(basketMap),
+            distinctFruitsInBasket: basketMap.size,
+            windowStart: windowStart,
+            windowEnd: windowEnd,
+            mode: 'fruits',
+            action: `Adding fruit '${endFruit}' to basket. Basket: ${JSON.stringify(Object.fromEntries(basketMap))}.`,
+            codeLines: [4, 5, 6]
+        });
+
+        while(basketMap.size > k) { // Line 7
+            let startFruit = fruits[windowStart]; // Line 8
+            basketMap.set(startFruit, basketMap.get(startFruit) - 1); // Line 9
+            if(basketMap.get(startFruit) == 0) { // Line 10
+                basketMap.delete(startFruit); // Line 11
+            }
+            windowStart++; // Line 12
+            logStep({
+                arr: [...fruits],
+                k: k,
+                maxFruitCount: maxFruitCount,
+                basketMap: Object.fromEntries(basketMap),
+                distinctFruitsInBasket: basketMap.size,
+                windowStart: windowStart, // Updated windowStart
+                windowEnd: windowEnd,
+                mode: 'fruits',
+                action: `Distinct fruits (${basketMap.size}) > k (${k}). Shrinking window, removed fruit '${startFruit}'.`,
+                codeLines: [7, 8, 9, 10, 11, 12]
+            });
+        }
+        maxFruitCount = Math.max(maxFruitCount, windowEnd - windowStart + 1); // Line 13
+        logStep({
+            arr: [...fruits],
+            k: k,
+            maxFruitCount: maxFruitCount,
+            basketMap: Object.fromEntries(basketMap),
+            distinctFruitsInBasket: basketMap.size,
+            currentWindowLength: windowEnd - windowStart + 1,
+            windowStart: windowStart,
+            windowEnd: windowEnd,
+            mode: 'fruits',
+            action: `Updating maxFruitCount. Current window length: ${windowEnd - windowStart + 1}. Max fruit count: ${maxFruitCount}.`,
+            codeLines: [13]
+        });
+    }
+    // Final step
+    logStep({
+        arr: [...fruits],
+        k: k,
         result: maxFruitCount,
         mode: 'fruits',
-        action: 'Final Result'
+        action: `Algorithm finished. Final max fruit count: ${maxFruitCount}.`,
+        codeLines: [14] // Highlight return
     });
-    return maxFruitCount;
+    return maxFruitCount; // Line 14
 }
-
-// Remove fs-related code
-/*
-const inputPath = process.argv[2];
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n');
-const fruits = input[0].split(',').map(Number);
-const k = Number(input[1]);
-console.log(fruitsInBasket(fruits, k));
-*/

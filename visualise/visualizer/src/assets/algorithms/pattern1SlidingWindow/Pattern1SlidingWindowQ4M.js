@@ -1,21 +1,3 @@
-/**
- * Length of longest substring with k different characters
- * -----------------------------------------------------
- * Input:   str,k
- *          abcdrfescdcdc, 3
- * O/P:     maxLength
- * Algo:    Sliding Window
- * Maintain
- * - hashmap (freq of chars in str),
- * - maxLength
- * 1. Loop the str
- * 2. Add the char to map (increase freq if already exist)
- * 3. if k > map size,
- *  - decrease freq (if freq 0 - remove from map),
- *  - reduce window size
- * 4. if k == map size, update maxLength to max of (maxLength, currWindowSize)
- * 
- */
 function longestSubstringLengthKDistinctChars(str, k) {
     let maxLength = -1, charFreqMap = {};
     for(let windowEnd=0, windowStart=0; windowEnd<str.length; windowEnd++) {

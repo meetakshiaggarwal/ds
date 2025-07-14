@@ -1,66 +1,71 @@
-/**
- * Length of longest Substring without repeating characters - No repeat Substring
- * ---------------------------------------------------------------------\
- * 1. Loop the str
- * 2. maintain map(with position) - of chars traversed in window
- * if endChar not in map - add
- * if exist - slide window to +1 pos of char (since the char can already be there in the map - legacy val - but start is updated before)
- * 3. update maxLen
- */
-
-// Remove 'import fs from 'fs';'
 export function longestSubstringWithoutRepeatingChars(str, logStep) {
-    let maxLength = 0;
-    let charPositionMap = {}; // Stores last seen index of char
-    let windowStart = 0;
+    let maxLength = 0; // Line 1
+    let charPositionMap = {}; // Line 2
+    let windowStart = 0; // Line 3
 
-    for(let windowEnd = 0; windowEnd < str.length; windowEnd++) {
-        let endChar = str[windowEnd];
-
-        if(endChar in charPositionMap) {
-            // If char is already in the window, slide windowStart past its last occurrence
-            windowStart = Math.max(windowStart, charPositionMap[endChar] + 1);
-            logStep({
-                arr: [...str],
-                windowStart: windowStart, // Updated windowStart
-                windowEnd: windowEnd,
-                charPositionMap: { ...charPositionMap },
-                currentWindowLength: windowEnd - windowStart + 1,
-                maxLength: maxLength,
-                mode: 'norepeat',
-                action: 'Found repeating char ' + endChar + ', sliding windowStart'
-            });
-        }
-        charPositionMap[endChar] = windowEnd; // Update last seen index of char
-
-        maxLength = Math.max(maxLength, windowEnd - windowStart + 1);
-
-        logStep({
-            arr: [...str],
-            windowStart: windowStart,
-            windowEnd: windowEnd,
-            charPositionMap: { ...charPositionMap },
-            currentWindowLength: windowEnd - windowStart + 1,
-            maxLength: maxLength, // Highlight update if changed
-            mode: 'norepeat',
-            action: 'Adding ' + endChar + ', updating maxLength'
-        });
-    }
+    // Initial step
     logStep({
         arr: [...str],
-        windowStart: windowStart, // Or -1
-        windowEnd: str.length - 1, // Or -1
+        maxLength: maxLength,
+        charPositionMap: { ...charPositionMap },
+        windowStart: 0,
+        windowEnd: -1,
+        mode: 'norepeat',
+        action: 'Initializing variables.',
+        codeLines: [1, 2, 3]
+    });
+
+    for(let windowEnd = 0; windowEnd < str.length; windowEnd++) { // Line 4
+        let endChar = str[windowEnd]; // Line 5
+        logStep({
+            arr: [...str],
+            maxLength: maxLength,
+            charPositionMap: { ...charPositionMap },
+            windowStart: windowStart,
+            windowEnd: windowEnd,
+            endChar: endChar,
+            mode: 'norepeat',
+            action: `Processing char '${endChar}'.`,
+            codeLines: [4, 5]
+        });
+
+        if(endChar in charPositionMap) { // Line 6
+            // If character is already in map, move windowStart to the right of its last occurrence
+            windowStart = Math.max(windowStart, charPositionMap[endChar] + 1); // Line 7
+            logStep({
+                arr: [...str],
+                maxLength: maxLength,
+                charPositionMap: { ...charPositionMap },
+                windowStart: windowStart, // Updated windowStart
+                windowEnd: windowEnd,
+                endChar: endChar,
+                mode: 'norepeat',
+                action: `'${endChar}' found in window. Moving windowStart to ${windowStart}.`,
+                codeLines: [6, 7]
+            });
+        }
+        charPositionMap[endChar] = windowEnd; // Line 8
+        maxLength = Math.max(maxLength, windowEnd - windowStart + 1); // Line 9
+        logStep({
+            arr: [...str],
+            maxLength: maxLength,
+            charPositionMap: { ...charPositionMap },
+            currentWindowLength: windowEnd - windowStart + 1,
+            windowStart: windowStart,
+            windowEnd: windowEnd,
+            endChar: endChar,
+            mode: 'norepeat',
+            action: `Updating char position for '${endChar}'. Current length: ${windowEnd - windowStart + 1}. Max length: ${maxLength}.`,
+            codeLines: [8, 9]
+        });
+    }
+    // Final step
+    logStep({
+        arr: [...str],
         result: maxLength,
         mode: 'norepeat',
-        action: 'Final Result'
+        action: `Algorithm finished. Final longest substring length: ${maxLength}.`,
+        codeLines: [10] // Highlight return
     });
-    return maxLength;
+    return maxLength; // Line 10
 }
-
-// Remove fs-related code
-/*
-const inputPath = process.argv[2];
-const input = fs.readFileSync(inputPath, 'utf-8').trim().split('\n');
-const str = input[0];
-console.log(longestSubstringWithoutRepeatingChars(str));
-*/

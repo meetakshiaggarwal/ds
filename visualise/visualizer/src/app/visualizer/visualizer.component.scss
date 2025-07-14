@@ -22,26 +22,35 @@ $radius: 6px;
 
 // General container styling for better aesthetics
 :host {
-  display: block; // Keep display: block
+  display: block;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #343a40;
-  background-color: transparent; // Make background transparent, parent (visualizer-panel) will have the card styling
-  padding: 0; 
-  border-radius: 0; 
-  box-shadow: none; 
-  max-width: 100%; 
-  margin: 0 auto; 
-  border: none; 
+  background-color: transparent; 
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  max-width: 100%;
+  margin: 0 auto;
+  border: none;
 }
 
 h3 {
   text-align: center;
   color: #212529;
+  margin-top: 0;
   margin-bottom: 25px;
   font-size: 1.6em;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 10px;
   font-weight: 600;
+}
+
+.no-steps-message {
+  text-align: center;
+  padding: 50px 20px;
+  color: #6c757d;
+  font-style: italic;
+  font-size: 1.1em;
 }
 
 .array-display {
@@ -51,96 +60,96 @@ h3 {
   margin: 30px 0 50px 0;
   flex-wrap: wrap;
   gap: 10px;
+}
 
-  .array-item-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
+.array-item-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.array-display span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+  border: $default-border;
+  border-radius: $radius;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  background-color: #f8f9fa;
+  color: #333;
+
+  &.in-window {
+    border: 2px solid $pointer-color;
+    background-color: lighten($pointer-color, 45%);
+    box-shadow: 0 0 12px rgba($pointer-color, 0.3);
+    transform: scale(1.03);
   }
 
-  span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-    border: $default-border;
-    border-radius: $radius;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-    background-color: #f8f9fa;
-    color: #333;
+  &.avg-mode.in-window { background-color: $avg-color; border-color: darken($avg-color, 20%); }
+  &.max-mode.in-window { background-color: $max-color; border-color: darken($max-color, 20%); }
+  &.min-mode.in-window { background-color: $min-color; border-color: darken($min-color, 20%); }
+  &.distinct-mode.in-window { background-color: $distinct-color; border-color: darken($distinct-color, 20%); }
+  &.fruits-mode.in-window { background-color: $fruits-color; border-color: darken($fruits-color, 20%); }
+  &.norepeat-mode.in-window { background-color: $norepeat-color; border-color: darken($norepeat-color, 20%); }
+  &.replacement-mode.in-window { background-color: $replacement-color; border-color: darken($replacement-color, 20%); }
+  &.max-ones-mode.in-window { background-color: $max-ones-color; border-color: darken($max-ones-color, 20%); }
+  &.permutation-mode.in-window { background-color: $permutation-color; border-color: darken($permutation-color, 20%); }
+}
 
-    &.in-window {
-      border: 2px solid $pointer-color;
-      background-color: lighten($pointer-color, 45%);
-      box-shadow: 0 0 12px rgba($pointer-color, 0.3);
-      transform: scale(1.03);
+.pointer {
+  position: absolute;
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+  transition: top 0.3s ease, bottom 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  &.start-pointer {
+    background-color: $window-start-color;
+    color: white;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid $window-start-color;
     }
-
-    &.avg-mode.in-window { background-color: $avg-color; border-color: darken($avg-color, 20%); }
-    &.max-mode.in-window { background-color: $max-color; border-color: darken($max-color, 20%); }
-    &.min-mode.in-window { background-color: $min-color; border-color: darken($min-color, 20%); }
-    &.distinct-mode.in-window { background-color: $distinct-color; border-color: darken($distinct-color, 20%); }
-    &.fruits-mode.in-window { background-color: $fruits-color; border-color: darken($fruits-color, 20%); }
-    &.norepeat-mode.in-window { background-color: $norepeat-color; border-color: darken($norepeat-color, 20%); }
-    &.replacement-mode.in-window { background-color: $replacement-color; border-color: darken($replacement-color, 20%); }
-    &.max-ones-mode.in-window { background-color: $max-ones-color; border-color: darken($max-ones-color, 20%); }
-    &.permutation-mode.in-window { background-color: $permutation-color; border-color: darken($permutation-color, 20%); }
   }
 
-  .pointer {
-    position: absolute;
-    font-size: 0.75em;
-    font-weight: bold;
-    padding: 3px 8px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 10;
-    transition: top 0.3s ease, bottom 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-
-    &.start-pointer {
-      background-color: $window-start-color;
-      color: white;
-      top: -30px;
+  &.end-pointer {
+    background-color: $window-end-color;
+    color: white;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    &:after {
+      content: '';
+      position: absolute;
+      top: -8px;
       left: 50%;
       transform: translateX(-50%);
-      &:after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-top: 8px solid $window-start-color;
-      }
-    }
-
-    &.end-pointer {
-      background-color: $window-end-color;
-      color: white;
-      bottom: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      &:after {
-        content: '';
-        position: absolute;
-        top: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-bottom: 8px solid $window-end-color;
-      }
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid $window-end-color;
     }
   }
 }
@@ -155,6 +164,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
+  min-height: 96px;
 
   div {
     margin-bottom: 0;
@@ -193,6 +203,17 @@ h3 {
   }
 }
 
+@keyframes pulse-text {
+  0% { transform: scale(1); color: #495057; }
+  50% { transform: scale(1.05); color: #e03131; }
+  100% { transform: scale(1); color: #495057; }
+}
+
+@keyframes fade-highlight {
+  0% { background-color: #fff0b3; }
+  100% { background-color: transparent; }
+}
+
 .controls {
   margin-top: 30px;
   text-align: center;
@@ -224,15 +245,4 @@ h3 {
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
     }
   }
-}
-
-@keyframes pulse-text {
-  0% { transform: scale(1); color: #495057; }
-  50% { transform: scale(1.05); color: #e03131; }
-  100% { transform: scale(1); color: #495057; }
-}
-
-@keyframes fade-highlight {
-  0% { background-color: #fff0b3; }
-  100% { background-color: transparent; }
 }

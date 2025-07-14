@@ -8,32 +8,36 @@
         <option *ngFor="let p of problems" [value]="p.id">{{ p.label }}</option>
       </select>
     </label>
-
     <label for="inputArray">
       Input:
       <input name="inputArray" type="text" [(ngModel)]="inputArray" placeholder="[1,2,3]" />
     </label>
-
     <label for="kInput">
       K / Target:
       <input name="k" type="number" [(ngModel)]="k" />
     </label>
-
     <label *ngIf="selectedProblem === 'string_permutation'" for="patternInput">
       Pattern:
       <input name="pattern" type="text" [(ngModel)]="pattern" placeholder="abc" />
     </label>
-
     <button (click)="run()">Run</button>
   </div>
 
   <div class="content-display">
     <div class="visualizer-panel">
-      <app-visualizer [steps]="steps"></app-visualizer>
+      <app-visualizer
+        [steps]="steps"
+        [currentStepIndex]="currentStepIndex"
+        (stepChange)="onVisualizerStepChange($event)"
+      ></app-visualizer>
     </div>
     <div class="code-editor">
       <h3>Algorithm Code</h3>
-      <pre><code>{{ selectedProblemCode }}</code></pre>
+      <pre #codeEditorPre><code><ng-container
+        *ngFor="let line of selectedProblemCode.split('\n'); let i = index"><span
+          class="line-number">{{ i + 1 }}</span><span
+            class="code-line" [class.highlighted-line]="highlightedLines.includes(i + 1)"
+            >{{ line }}</span><br></ng-container></code></pre>
     </div>
   </div>
 

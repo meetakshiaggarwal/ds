@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core'; // Import OnInit
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // For *ngFor, *ngIf, keyvalue pipe
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 import { VisualizerComponent } from './visualizer/visualizer.component';
 
-// Import all your algorithm functions
+// Import all your algorithm functions (these are the executable functions)
 import { findAvgSubArrays } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ1E';
 import { getMaxSumOfSubarray } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ2E';
 import { smallestSubArray } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ3E';
@@ -17,8 +18,29 @@ import { longestSubstringWithoutRepeatingChars } from './algorithms/pattern1Slid
 import { longestSubstringWithSameLetterWithKReplacements } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ8M';
 import { maxOnesWithKReplacements } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ9M';
 import { findPermutation } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ10M';
-import { HttpClient } from '@angular/common/http';
 
+interface Problem {
+  id: string;
+  label: string;
+  filename: string;
+}
+
+interface Step {
+  arr: any[];
+  windowStart: number;
+  windowEnd: number;
+  winSum?: number;
+  maxSum?: number;
+  minVal?: number;
+  distinctCount?: number;
+  fruitsInBasket?: any;
+  replacements?: number;
+  onesCount?: number;
+  permutationsFound?: string[];
+  mode: string;
+  action: string;
+  codeLines?: number[];
+}
 
 @Component({
   selector: 'app-root',
@@ -27,8 +49,8 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit { // Implement OnInit
-  problems = [
+export class AppComponent implements OnInit {
+  problems: Problem[] = [
     { id: 'avg', label: '1. Find Averages of Subarrays (E) LC643', filename: 'Pattern1SlidingWindowQ1E.js' },
     { id: 'max_sum_k', label: '2. Max Sum Subarray of Size K (E) LC1708', filename: 'Pattern1SlidingWindowQ2E.js' },
     { id: 'min_subarray_sum', label: '3. Smallest Subarray with Given Sum (E) LC209', filename: 'Pattern1SlidingWindowQ3E.js' },
@@ -41,26 +63,27 @@ export class AppComponent implements OnInit { // Implement OnInit
     { id: 'string_permutation', label: '10. Permutation in a String (M) LC567', filename: 'Pattern1SlidingWindowQ10M.js' }
   ];
 
-  selectedProblem = 'avg';
-  steps: any[] = [];
+  selectedProblem: string = 'avg';
+  steps: Step[] = [];
   inputArray: any;
   k: number | null = null;
   pattern: string | null = null;
   currentStepIndex: number = 0;
   selectedProblemCode: string = '';
+  highlightedLines: number[] = [];
+
+  @ViewChild('codeEditorPre') codeEditorPre!: ElementRef;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.updateInputsForProblem();
     this.loadAlgorithmCode();
-    this.run();
   }
 
   onProblemChange() {
     this.updateInputsForProblem();
     this.loadAlgorithmCode();
-    this.run();
   }
 
   updateInputsForProblem() {
@@ -120,22 +143,49 @@ export class AppComponent implements OnInit { // Implement OnInit
       this.http.get(filePath, { responseType: 'text' }).subscribe(
         code => {
           this.selectedProblemCode = code;
+          this.run();
         },
         error => {
           console.error('Error loading algorithm code:', error);
           this.selectedProblemCode = `// Error loading code for ${problem.label}. Check console for details.`;
+          this.steps = [];
+          this.currentStepIndex = 0;
+          this.highlightedLines = [];
         }
       );
     } else {
       this.selectedProblemCode = '// No code available for this problem.';
+      this.steps = [];
+      this.currentStepIndex = 0;
+      this.highlightedLines = [];
+    }
+  }
+
+  onVisualizerStepChange(step: Step): void {
+    this.currentStepIndex = this.steps.indexOf(step);
+    this.highlightedLines = step.codeLines || [];
+    if (this.highlightedLines.length > 0) {
+      setTimeout(() => this.scrollToHighlightedLine(this.highlightedLines[0]), 0);
+    }
+  }
+
+  private scrollToHighlightedLine(lineNumber: number): void {
+    if (this.codeEditorPre) {
+      const lineElement = this.codeEditorPre.nativeElement.querySelector(`.code-line:nth-child(${lineNumber})`);
+      if (lineElement) {
+        lineElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   }
 
   run() {
     this.steps = [];
     this.currentStepIndex = 0;
+    this.highlightedLines = [];
 
-    const logStep = (data: any) => this.steps.push(data);
+    const logStep = (data: any) => {
+      this.steps.push(data);
+    };
 
     let processedArray: any;
 
@@ -164,34 +214,32 @@ export class AppComponent implements OnInit { // Implement OnInit
         break;
       case 'k_distinct_chars':
         longestSubstringLengthKDistinctChars(processedArray as string, this.k as number, logStep);
-        console.log('K Distinct Chars not yet visualized.');
         break;
       case 'fruits_basket':
         fruitsInBasket(processedArray as number[], this.k as number, logStep);
-        console.log('Fruits in Basket not yet visualized.');
         break;
       case 'two_distinct_chars':
         longestSubstring(processedArray as string, logStep);
-        console.log('Two Distinct Chars not yet visualized.');
         break;
       case 'no_repeat_substring':
         longestSubstringWithoutRepeatingChars(processedArray as string, logStep);
-        console.log('No Repeat Substring not yet visualized.');
         break;
       case 'longest_replacement':
         longestSubstringWithSameLetterWithKReplacements(processedArray as string, this.k as number, logStep);
-        console.log('Longest Replacement not yet visualized.');
         break;
       case 'max_ones_replacement':
         maxOnesWithKReplacements(processedArray as number[], this.k as number, logStep);
-        console.log('Max Ones Replacement not yet visualized.');
         break;
       case 'string_permutation':
         findPermutation(processedArray as string, this.pattern as string, logStep);
-        console.log('String Permutation not yet visualized.');
         break;
       default:
         console.warn('Unknown problem selected:', this.selectedProblem);
+    }
+
+    if (this.steps.length > 0) {
+      this.highlightedLines = this.steps[0].codeLines || [];
+      setTimeout(() => this.scrollToHighlightedLine(this.highlightedLines[0]), 0);
     }
   }
 }
