@@ -7,13 +7,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { VisualizerComponent } from './visualizer/visualizer.component';
 
-// Import all your algorithm functions (these are the executable functions)
+// Import all your algorithm functions
 import { findAvgSubArrays } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ1E';
 import { getMaxSumOfSubarray } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ2E';
 import { smallestSubArray } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ3E';
 import { longestSubstringLengthKDistinctChars } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ4M';
 import { fruitsInBasket } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ5M';
-import { longestSubstring } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ6M'; // This wraps Q4M
+import { longestSubstring } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ6M';
 import { longestSubstringWithoutRepeatingChars } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ7M';
 import { longestSubstringWithSameLetterWithKReplacements } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ8M';
 import { maxOnesWithKReplacements } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ9M';
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
   selectedProblemCode: string = '';
   highlightedLines: number[] = [];
 
-  @ViewChild('codeEditorPre') codeEditorPre!: ElementRef;
+  @ViewChild('codeEditorPre') codeEditorPre!: ElementRef<HTMLPreElement>;
 
   constructor(private http: HttpClient) {}
 
@@ -142,7 +142,7 @@ export class AppComponent implements OnInit {
       const filePath = `assets/algorithms/pattern1SlidingWindow/${problem.filename}`;
       this.http.get(filePath, { responseType: 'text' }).subscribe(
         code => {
-          this.selectedProblemCode = code;
+          this.selectedProblemCode = code
           this.run();
         },
         error => {
@@ -162,23 +162,38 @@ export class AppComponent implements OnInit {
   }
 
   onVisualizerStepChange(step: Step): void {
-    this.currentStepIndex = this.steps.indexOf(step);
-    this.highlightedLines = step.codeLines || [];
-    if (this.highlightedLines.length > 0) {
-      setTimeout(() => this.scrollToHighlightedLine(this.highlightedLines[0]), 0);
+    if (step) {
+      this.highlightedLines = step.codeLines || [];
+      if (this.highlightedLines.length > 0) {
+        setTimeout(() => this.scrollToHighlightedLine(this.highlightedLines[0]), 0);
+      }
+    } else {
+      this.highlightedLines = [];
     }
   }
 
   private scrollToHighlightedLine(lineNumber: number): void {
-    if (this.codeEditorPre) {
-      const lineElement = this.codeEditorPre.nativeElement.querySelector(`.code-line:nth-child(${lineNumber})`);
-      if (lineElement) {
-        lineElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (this.codeEditorPre && this.codeEditorPre.nativeElement) {
+      const preElement = this.codeEditorPre.nativeElement;
+      const lineElements = preElement.querySelectorAll('.code-line');
+
+      if (lineElements.length >= lineNumber) {
+        const targetLineElement = lineElements[lineNumber - 1] as HTMLElement;
+
+        const scrollOffset = targetLineElement.offsetTop - preElement.offsetTop;
+
+        const offsetToCenter = (preElement.clientHeight / 2) - (targetLineElement.clientHeight / 2);
+        const finalScrollTop = scrollOffset - offsetToCenter;
+
+        preElement.scrollTo({
+          top: finalScrollTop,
+          behavior: 'smooth'
+        });
       }
     }
   }
 
-  run() {
+  run(): void {
     this.steps = [];
     this.currentStepIndex = 0;
     this.highlightedLines = [];

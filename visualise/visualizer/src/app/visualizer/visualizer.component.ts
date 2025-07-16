@@ -30,6 +30,7 @@ export class VisualizerComponent implements OnChanges {
   @Input() steps: Step[] = [];
   @Input() currentStepIndex: number = 0;
   @Input() speed = 1000;
+  
 
   isPlaying = false;
   interval: any;
@@ -37,29 +38,34 @@ export class VisualizerComponent implements OnChanges {
 
   currentStep: Step | null = null;
 
-  @Output() stepChange = new EventEmitter<Step>();
+  @Output() stepChange = new EventEmitter<Step>(); // Emits the full step object
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['steps'] || changes['currentStepIndex']) {
       if (this.steps.length > 0) {
         this.currentStep = this.steps[this.currentStepIndex];
-        this.stepChange.emit(this.currentStep);
+        this.stepChange.emit(this.currentStep); // Emit the current step to parent
       } else {
         this.currentStep = null;
-        this.stepChange.emit(null as any);
+        this.stepChange.emit(null as any); // Emit null when no steps
       }
+    }
+    if (changes['speed'] && this.isPlaying) {
+      this.pause();
+      this.play();
     }
   }
 
   play() {
     if (!this.isPlaying) {
       this.isPlaying = true;
+      clearInterval(this.interval);
       this.interval = setInterval(() => {
         if (this.currentStepIndex < this.steps.length - 1) {
           this.prevStep = this.currentStep;
           this.currentStepIndex++;
           this.currentStep = this.steps[this.currentStepIndex];
-          this.stepChange.emit(this.currentStep);
+          this.stepChange.emit(this.currentStep); // Emit updated step
         } else {
           this.stop();
         }
@@ -72,8 +78,17 @@ export class VisualizerComponent implements OnChanges {
     clearInterval(this.interval);
   }
 
+  togglePlayPause() {
+    if (this.isPlaying) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  }
+
   next() {
     if (this.currentStepIndex < this.steps.length - 1) {
+      this.pause();
       this.prevStep = this.currentStep;
       this.currentStepIndex++;
       this.currentStep = this.steps[this.currentStepIndex];
@@ -85,6 +100,7 @@ export class VisualizerComponent implements OnChanges {
 
   prev() {
     if (this.currentStepIndex > 0) {
+      this.pause();
       this.currentStepIndex--;
       this.prevStep = this.steps[this.currentStepIndex - 1] || null;
       this.currentStep = this.steps[this.currentStepIndex];
@@ -98,16 +114,8 @@ export class VisualizerComponent implements OnChanges {
     this.pause();
     this.currentStepIndex = 0;
     this.prevStep = null;
-    this.currentStep = this.steps[this.currentStepIndex];
+    this.currentStep = this.steps.length > 0 ? this.steps[0] : null;
     this.stepChange.emit(this.currentStep);
-  }
-
-  togglePlayPause() {
-    if (this.isPlaying) {
-      this.pause();
-    } else {
-      this.play();
-    }
   }
 
   getKeys(obj: any): string[] {

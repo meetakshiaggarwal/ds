@@ -48,6 +48,11 @@
     <button (click)="togglePlayPause()">{{ isPlaying ? '⏸ Pause' : '▶ Play' }}</button>
     <button (click)="next()">⏭ Next</button>
     <button (click)="stop()">⏹ Stop</button>
+    <label class="speed-control">
+      Speed:
+      <input type="range" [(ngModel)]="speed" min="100" max="2000" step="100" (change)="play()" />
+      {{ speed }}ms
+    </label>
   </div>
 </div>
 <div *ngIf="!currentStep && steps.length > 0" class="no-steps-message">
