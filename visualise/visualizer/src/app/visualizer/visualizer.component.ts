@@ -17,6 +17,23 @@ interface Step {
   mode: string;
   action: string;
   codeLines?: number[];
+  pattern?: string;
+  patternCharFreq?: { [key: string]: number };
+  matched?: number;
+  result?: boolean;
+  t?: string;
+  tFreqMap?: Map<string, number>;
+  winFreqMap?: Map<string, number>;
+  winMatchesWithFreq?: number;
+  tCharCount?: number;
+  currentWindowLen?: number;
+  minLen?: number;
+  minStart?: number;
+  finalResult?: string;
+  charE?: string;
+  charS?: string;
+  rightChar?: string;
+  leftChar?: string;
 }
 
 @Component({
@@ -38,17 +55,24 @@ export class VisualizerComponent implements OnChanges {
 
   currentStep: Step | null = null;
 
-  @Output() stepChange = new EventEmitter<Step>(); // Emits the full step object
+  @Output() stepChange = new EventEmitter<Step>();
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['steps'] || changes['currentStepIndex']) {
-      if (this.steps.length > 0) {
-        this.currentStep = this.steps[this.currentStepIndex];
-        this.stepChange.emit(this.currentStep); // Emit the current step to parent
-      } else {
-        this.currentStep = null;
-        this.stepChange.emit(null as any); // Emit null when no steps
+    if (changes['steps'] && changes['steps'].currentValue !== changes['steps'].previousValue) {
+      this.stop();
+    }
+    if (this.steps.length > 0) {
+      if (this.currentStepIndex >= this.steps.length) {
+        this.currentStepIndex = this.steps.length - 1;
+        this.pause();
+      } else if (this.currentStepIndex < 0) {
+        this.currentStepIndex = 0;
       }
+      this.currentStep = this.steps[this.currentStepIndex];
+      this.stepChange.emit(this.currentStep);
+    } else {
+      this.currentStep = null;
+      this.stepChange.emit(null as any);
     }
     if (changes['speed'] && this.isPlaying) {
       this.pause();
@@ -57,7 +81,12 @@ export class VisualizerComponent implements OnChanges {
   }
 
   play() {
-    if (!this.isPlaying) {
+    if (this.currentStepIndex >= this.steps.length - 1 && this.steps.length > 0) {
+      this.pause();
+      return;
+    }
+
+    if (!this.isPlaying && this.currentStepIndex < this.steps.length) {
       this.isPlaying = true;
       clearInterval(this.interval);
       this.interval = setInterval(() => {
@@ -65,9 +94,9 @@ export class VisualizerComponent implements OnChanges {
           this.prevStep = this.currentStep;
           this.currentStepIndex++;
           this.currentStep = this.steps[this.currentStepIndex];
-          this.stepChange.emit(this.currentStep); // Emit updated step
+          this.stepChange.emit(this.currentStep);
         } else {
-          this.stop();
+          this.pause();
         }
       }, this.speed);
     }
@@ -94,7 +123,7 @@ export class VisualizerComponent implements OnChanges {
       this.currentStep = this.steps[this.currentStepIndex];
       this.stepChange.emit(this.currentStep);
     } else {
-      this.stop();
+      this.pause();
     }
   }
 
@@ -106,7 +135,7 @@ export class VisualizerComponent implements OnChanges {
       this.currentStep = this.steps[this.currentStepIndex];
       this.stepChange.emit(this.currentStep);
     } else {
-      this.stop();
+      this.pause();
     }
   }
 
@@ -126,7 +155,16 @@ export class VisualizerComponent implements OnChanges {
     if (!this.prevStep || !this.currentStep) {
       return false;
     }
-    if (typeof this.currentStep[key] === 'object' && this.currentStep[key] !== null) {
+    if (this.currentStep[key] instanceof Map) {
+      const prevMap = this.prevStep[key] as Map<any, any>;
+      const currentMap = this.currentStep[key] as Map<any, any>;
+      if (prevMap.size !== currentMap.size) return true;
+      for (const [k, v] of currentMap.entries()) {
+        if (prevMap.get(k) !== v) return true;
+      }
+      return false;
+    }
+    if (typeof this.currentStep[key] === 'object' && this.currentStep[key] !== null && !Array.isArray(this.currentStep[key])) {
       return JSON.stringify(this.prevStep[key]) !== JSON.stringify(this.currentStep[key]);
     }
     return this.prevStep[key] !== this.currentStep[key];
@@ -139,8 +177,14 @@ export class VisualizerComponent implements OnChanges {
     if (value === null) {
       return 'null';
     }
+    if (value instanceof Map) {
+      return JSON.stringify(Object.fromEntries(value), null, 2);
+    }
     if (typeof value === 'object') {
       return JSON.stringify(value, null, 2);
+    }
+    if (value === Infinity) {
+        return 'Infinity';
     }
     return value.toString();
   }

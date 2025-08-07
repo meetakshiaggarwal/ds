@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "bubble": "node bubble.js inputs/bubbleI1.txt",
+
     "pattern1Q1SlidingWindowAvgOfSubArrOfSizeKEasy-LC643": "node pattern1/Pattern1SlidingWindowQ1E.js inputs/Pattern1SlidingWindowQ1I1.txt",
     "pattern1Q2SlidingWindowMaxSumOfSubArrOfSizeKEasy-LC1708": "node pattern1/Pattern1SlidingWindowQ2E.js inputs/Pattern1SlidingWindowQ2I1.txt",
     "pattern1Q3SlidingWindowMinLenOfSubArrWithTargetSumEasy-LC209": "node pattern1/Pattern1SlidingWindowQ3E.js inputs/Pattern1SlidingWindowQ3I1.txt",
@@ -16,6 +17,10 @@
     "pattern1Q8SlidingWindowLengthOfLongestSubstrWithSameLetterAfterKReplacementMedium-LC424": "node pattern1/Pattern1SlidingWindowQ8M.js inputs/Pattern1SlidingWindowQ8I1.txt",
     "pattern1Q9SlidingWindowLengthOfLongestSubstrWithMaxOnesKReplacementsOf0sMedium-LC1004": "node pattern1/Pattern1SlidingWindowQ9M.js inputs/Pattern1SlidingWindowQ9I1.txt",
     "pattern1Q10SlidingWindowPermutationsInAStringMedium-LC567": "node pattern1/Pattern1SlidingWindowQ10M.js inputs/Pattern1SlidingWindowQ10I1.txt",
+    "pattern1Q11SlidingWindowStringAnagramMedium-LC438": "node pattern1/Pattern1SlidingWindowQ11M.js inputs/Pattern1SlidingWindowQ11I1.txt",
+    "pattern1Q12SlidingWindowSmallestWindowWithSubstringHard-LC76": "node pattern1/Pattern1SlidingWindowQ12H.js inputs/Pattern1SlidingWindowQ12I1.txt",
+    "pattern1Q13SlidingWindowWordConcatenationHard-LC30": "node pattern1/Pattern1SlidingWindowQ13H.js inputs/Pattern1SlidingWindowQ13I1.txt",
+
     "pattern2Q1TwoPointersSortedTwoSumEasy-LC": "node pattern2/Pattern2TwoPointersQ1E.js inputs/Pattern2TwoPointersQ1I1.txt",
     "pattern2Q2TwoPointersUnSortedTwoSumEasy-LC": "node pattern2/Pattern2TwoPointersQ2E.js inputs/Pattern2TwoPointersQ2I1.txt",
     "pattern2Q3TwoPointersSortedRemoveDuplicatesEasy-LC": "node pattern2/Pattern2TwoPointersQ3E.js inputs/Pattern2TwoPointersQ3I1.txt",
@@ -29,6 +34,7 @@
     "pattern2Q11FourSumMedium-LC": "node pattern2/Pattern2TwoPointersQ11M.js inputs/Pattern2TwoPointersQ11I1.txt",
     "pattern2Q12BackspaceStringCompareMedium-LC": "node pattern2/Pattern2TwoPointersQ12M.js inputs/Pattern2TwoPointersQ12I1.txt",
     "pattern2Q13ShortestArrayToRemoveToMakeSortedArrMedium-LC": "node pattern2/Pattern2TwoPointersQ13M.js inputs/Pattern2TwoPointersQ13I1.txt"
+
   },
   "keywords": [],
   "author": "",

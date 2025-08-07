@@ -9,17 +9,24 @@
       </select>
     </label>
     <label for="inputArray">
-      Input:
+      Input(Array/String):
       <input name="inputArray" type="text" [(ngModel)]="inputArray" placeholder="[1,2,3]" />
     </label>
-    <label for="kInput">
+
+    <label *ngIf="selectedProblem === 'string_permutation' || selectedProblem === 'min_window_substring'" for="patternInput">
+      <ng-container *ngIf="selectedProblem === 'string_permutation'">
+        Pattern:
+      </ng-container>
+      <ng-container *ngIf="selectedProblem === 'min_window_substring'">
+        Target(t):
+      </ng-container>
+      <input name="pattern" type="text" [(ngModel)]="pattern" placeholder="e.g., abc or ABC" />
+    </label>
+    <label *ngIf="selectedProblem !== 'string_permutation' && selectedProblem !== 'min_window_substring' && selectedProblem !== 'two_distinct_chars' && selectedProblem !== 'no_repeat_substring'" for="kInput">
       K / Target:
       <input name="k" type="number" [(ngModel)]="k" />
     </label>
-    <label *ngIf="selectedProblem === 'string_permutation'" for="patternInput">
-      Pattern:
-      <input name="pattern" type="text" [(ngModel)]="pattern" placeholder="abc" />
-    </label>
+
     <button (click)="run()">Run</button>
   </div>
 

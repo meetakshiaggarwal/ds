@@ -18,6 +18,7 @@ import { longestSubstringWithoutRepeatingChars } from './algorithms/pattern1Slid
 import { longestSubstringWithSameLetterWithKReplacements } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ8M';
 import { maxOnesWithKReplacements } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ9M';
 import { findPermutation } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ10M';
+import { minWindow } from './algorithms/pattern1SlidingWindow/Pattern1SlidingWindowQ12H';
 
 interface Problem {
   id: string;
@@ -40,6 +41,24 @@ interface Step {
   mode: string;
   action: string;
   codeLines?: number[];
+  // Include all possible properties from different algorithm steps
+  pattern?: string;
+  patternCharFreq?: { [key: string]: number };
+  matched?: number;
+  result?: boolean;
+  t?: string;
+  tFreqMap?: Map<string, number>;
+  winFreqMap?: Map<string, number>;
+  winMatchesWithFreq?: number;
+  tCharCount?: number;
+  currentWindowLen?: number;
+  minLen?: number;
+  minStart?: number;
+  finalResult?: string;
+  charE?: string;
+  charS?: string;
+  rightChar?: string;
+  leftChar?: string;
 }
 
 @Component({
@@ -60,7 +79,8 @@ export class AppComponent implements OnInit {
     { id: 'no_repeat_substring', label: '7. Longest Substring Without Repeating Chars (M) LC3', filename: 'Pattern1SlidingWindowQ7M.js' },
     { id: 'longest_replacement', label: '8. Longest Substring with Same Letter after K Replacements (M) LC424', filename: 'Pattern1SlidingWindowQ8M.js' },
     { id: 'max_ones_replacement', label: '9. Max Ones after K Replacements (M) LC1004', filename: 'Pattern1SlidingWindowQ9M.js' },
-    { id: 'string_permutation', label: '10. Permutation in a String (M) LC567', filename: 'Pattern1SlidingWindowQ10M.js' }
+    { id: 'string_permutation', label: '10. Permutation in a String (M) LC567', filename: 'Pattern1SlidingWindowQ10M.js' },
+    { id: 'min_window_substring', label: '11. Minimum Window Substring (H) LC76', filename: 'Pattern1SlidingWindowQ12H.js' }
   ];
 
   selectedProblem: string = 'avg';
@@ -90,7 +110,6 @@ export class AppComponent implements OnInit {
     this.inputArray = [];
     this.k = null;
     this.pattern = '';
-
     switch (this.selectedProblem) {
       case 'avg':
         this.inputArray = [2, 1, 5, 1, 3, 2];
@@ -131,6 +150,11 @@ export class AppComponent implements OnInit {
       case 'string_permutation':
         this.inputArray = "oidbcaf";
         this.pattern = "abc";
+        this.k = null;
+        break;
+      case 'min_window_substring':
+        this.inputArray = "ADOBECODEBANC";
+        this.pattern = "ABC";
         this.k = null;
         break;
     }
@@ -204,8 +228,8 @@ export class AppComponent implements OnInit {
 
     let processedArray: any;
 
-    if (['k_distinct_chars', 'two_distinct_chars', 'no_repeat_substring', 'longest_replacement', 'string_permutation'].includes(this.selectedProblem)) {
-      processedArray = this.inputArray as string;
+    if (['k_distinct_chars', 'two_distinct_chars', 'no_repeat_substring', 'longest_replacement', 'string_permutation', 'min_window_substring'].includes(this.selectedProblem)) {
+      processedArray = (this.inputArray as string).split('');
     } else {
       if (typeof this.inputArray === 'string') {
         processedArray = (this.inputArray as string).split(',').map(s => {
@@ -246,7 +270,10 @@ export class AppComponent implements OnInit {
         maxOnesWithKReplacements(processedArray as number[], this.k as number, logStep);
         break;
       case 'string_permutation':
-        findPermutation(processedArray as string, this.pattern as string, logStep);
+        findPermutation((processedArray as string[]).join(''), this.pattern as string, logStep);
+        break;
+      case 'min_window_substring':
+        minWindow((processedArray as string[]).join(''), this.pattern as string, logStep);
         break;
       default:
         console.warn('Unknown problem selected:', this.selectedProblem);

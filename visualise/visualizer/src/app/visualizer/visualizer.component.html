@@ -19,7 +19,8 @@
             'norepeat-mode': currentStep.mode === 'norepeat',
             'replacement-mode': currentStep.mode === 'replacement',
             'max-ones-mode': currentStep.mode === 'max-ones',
-            'permutation-mode': currentStep.mode === 'permutation'
+            'permutation-mode': currentStep.mode === 'permutation',
+            'min-window-mode': currentStep.mode === 'min-window'
           }"
         >
           {{ val }}
@@ -34,7 +35,7 @@
 
   <div class="variables">
     <ng-container *ngFor="let key of getKeys(currentStep)">
-      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action' && key !== 'codeLines'">
+      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action' && key !== 'codeLines' && key !== 't' && key !== 'pattern'">
         <div>
           <strong>{{ key }}:</strong>
           <span [ngClass]="{'variable-changed': hasVariableChanged(key)}">{{ formatVariable(currentStep[key]) }}</span>
@@ -48,11 +49,11 @@
     <button (click)="togglePlayPause()">{{ isPlaying ? '⏸ Pause' : '▶ Play' }}</button>
     <button (click)="next()">⏭ Next</button>
     <button (click)="stop()">⏹ Stop</button>
-    <label class="speed-control">
+    <!-- <label class="speed-control">
       Speed:
       <input type="range" [(ngModel)]="speed" min="100" max="2000" step="100" (change)="play()" />
       {{ speed }}ms
-    </label>
+    </label> -->
   </div>
 </div>
 <div *ngIf="!currentStep && steps.length > 0" class="no-steps-message">

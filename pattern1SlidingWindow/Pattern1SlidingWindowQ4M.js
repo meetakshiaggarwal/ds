@@ -22,16 +22,16 @@
 import fs from 'fs';
 
 function longestSubstringLengthKDistinctChars(str, k) {
-    let maxLength = -1, charFreqMap = {};
+    let maxLength = 0, charFreqMap = new Map();
     for(let windowEnd=0, windowStart=0; windowEnd<str.length; windowEnd++) {
         let endChar = str[windowEnd];
-        charFreqMap[endChar] = endChar in charFreqMap ? charFreqMap[endChar] + 1 : 1;
-        while(Object.keys(charFreqMap).length > k) {//Algo complx - depends on the value of k - calculating the size of the map
+        charFreqMap.set(endChar, (charFreqMap.get(endChar)||0) + 1);
+        while(charFreqMap.size > k) {
             let startChar = str[windowStart];
-            charFreqMap[startChar]--;
+            charFreqMap.set(startChar, charFreqMap.get(startChar)-1)
             windowStart++;
-            if(charFreqMap[startChar] == 0) {
-                delete charFreqMap[startChar];
+            if(charFreqMap.get(startChar) == 0) {
+                charFreqMap.delete(startChar);
             }
         }
         maxLength = Math.max(maxLength, windowEnd - windowStart + 1);
