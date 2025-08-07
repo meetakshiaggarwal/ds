@@ -35,10 +35,10 @@
 
   <div class="variables">
     <ng-container *ngFor="let key of getKeys(currentStep)">
-      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action' && key !== 'codeLines' && key !== 't' && key !== 'pattern'">
+      <ng-container *ngIf="key !== 'arr' && key !== 'mode' && key !== 'action' && key !== 'codeLines' && key !== 'alwaysHighlightedKeys' && key !== 't' && key !== 'pattern'">
         <div>
           <strong>{{ key }}:</strong>
-          <span [ngClass]="{'variable-changed': hasVariableChanged(key)}">{{ formatVariable(currentStep[key]) }}</span>
+          <span [ngClass]="{'variable-changed-value': hasVariableChanged(key), 'highlighted-var': isAlwaysHighlighted(key)}">{{ formatVariable(currentStep[key]) }}</span>
         </div>
       </ng-container>
     </ng-container>

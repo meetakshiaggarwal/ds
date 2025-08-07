@@ -34,6 +34,7 @@ interface Step {
   charS?: string;
   rightChar?: string;
   leftChar?: string;
+  alwaysHighlightedKeys?: string[];
 }
 
 @Component({
@@ -47,7 +48,6 @@ export class VisualizerComponent implements OnChanges {
   @Input() steps: Step[] = [];
   @Input() currentStepIndex: number = 0;
   @Input() speed = 1000;
-  
 
   isPlaying = false;
   interval: any;
@@ -78,6 +78,10 @@ export class VisualizerComponent implements OnChanges {
       this.pause();
       this.play();
     }
+  }
+
+  isAlwaysHighlighted(key: string): boolean {
+    return this.currentStep?.alwaysHighlightedKeys?.includes(key) || false;
   }
 
   play() {

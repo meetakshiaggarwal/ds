@@ -6,9 +6,8 @@ export function longestSubstringLengthKDistinctChars(str, k, logStep) {// Line 1
         arr: [...str],
         k: k,
         maxLength: maxLength,
-        charFreqMap: { ...charFreqMap },
-        distinctCharsInWindow: 0,
-        windowStart: 0,
+        charFreqMap: Object.fromEntries(charFreqMap),
+        windowStart: windowStart,
         mode: 'distinct',
         action: 'Initializing variables.',
         codeLines: [1, 2]
@@ -22,13 +21,14 @@ export function longestSubstringLengthKDistinctChars(str, k, logStep) {// Line 1
             arr: [...str],
             k: k,
             maxLength: maxLength,
-            charFreqMap: { ...charFreqMap },
+            charFreqMap: Object.fromEntries(charFreqMap),
             distinctCharsInWindow: charFreqMap.size,
             windowStart: windowStart,
             windowEnd: windowEnd,
             endChar: endChar,
             mode: 'distinct',
             action: `Adding '${endChar}' to window. Freq map: ${JSON.stringify(charFreqMap)}.`,
+            alwaysHighlightedKeys: ['distinctCharsInWindow'],
             codeLines: [3, 4, 5]
         });
 
@@ -43,7 +43,7 @@ export function longestSubstringLengthKDistinctChars(str, k, logStep) {// Line 1
                 arr: [...str],
                 k: k,
                 maxLength: maxLength,
-                charFreqMap: { ...charFreqMap },
+                charFreqMap: Object.fromEntries(charFreqMap),
                 distinctCharsInWindow: charFreqMap.size,
                 windowStart: windowStart, // Updated windowStart
                 windowEnd: windowEnd,
@@ -51,6 +51,7 @@ export function longestSubstringLengthKDistinctChars(str, k, logStep) {// Line 1
                 startChar: startChar,
                 mode: 'distinct',
                 action: `Distinct chars (${charFreqMap.size}) > k (${k}). Shrinking window, removed '${startChar}'.`,
+                alwaysHighlightedKeys: ['distinctCharsInWindow'],
                 codeLines: [6, 7, 8, 9, 10, 11]
             });// Line 12
         }// Line 13
@@ -59,7 +60,7 @@ export function longestSubstringLengthKDistinctChars(str, k, logStep) {// Line 1
             arr: [...str],
             k: k,
             maxLength: maxLength,
-            charFreqMap: { ...charFreqMap },
+            charFreqMap: Object.fromEntries(charFreqMap),
             currentWindowLength: windowEnd - windowStart + 1,
             distinctCharsInWindow: charFreqMap.size,
             windowStart: windowStart,
@@ -67,6 +68,7 @@ export function longestSubstringLengthKDistinctChars(str, k, logStep) {// Line 1
             endChar: endChar,
             mode: 'distinct',
             action: `Updating maxLength. Current window length: ${windowEnd - windowStart + 1}. Max length: ${maxLength}.`,
+            alwaysHighlightedKeys: ['currentWindowLength','distinctCharsInWindow'],
             codeLines: [14]
         });
     }
